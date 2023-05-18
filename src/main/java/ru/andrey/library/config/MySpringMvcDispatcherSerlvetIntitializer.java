@@ -1,8 +1,9 @@
-package ru.alishev.springcourse.config;
+package ru.andrey.library.config;
 
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+import ru.andrey.library.config.SpringConfig;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
@@ -34,6 +35,11 @@ public class MySpringMvcDispatcherSerlvetIntitializer extends AbstractAnnotation
         registerHiddenFieldFilter(aServletContext);
     }
 
+    private void registerHiddenFieldFilter(ServletContext aContext) {
+        aContext.addFilter("hiddenHttpMethodFilter",
+                new HiddenHttpMethodFilter()).addMappingForUrlPatterns(null, true, "/*");
+    }
+
     private void registerCharacterEncodingFilter(ServletContext aContext) {
         EnumSet<DispatcherType> dispatcherTypes = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD);
 
@@ -43,10 +49,5 @@ public class MySpringMvcDispatcherSerlvetIntitializer extends AbstractAnnotation
 
         FilterRegistration.Dynamic characterEncoding = aContext.addFilter("characterEncoding", characterEncodingFilter);
         characterEncoding.addMappingForUrlPatterns(dispatcherTypes, true, "/*");
-    }
-
-    private void registerHiddenFieldFilter(ServletContext aContext) {
-        aContext.addFilter("hiddenHttpMethodFilter",
-                new HiddenHttpMethodFilter()).addMappingForUrlPatterns(null ,true, "/*");
     }
 }
